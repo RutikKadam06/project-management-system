@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: project-management-system
+    env: java
+    buildCommand: mvn clean install -DskipTests
+    startCommand: java -jar target/project-management-system-1.0.0.jar
+    envVars:
+      - key: JAVA_VERSION
+        value: 21
+      - key: MAVEN_VERSION
+        value: 3.9
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: SERVER_PORT
+        value: 8080
+      - key: MONGODB_URI
+        sync: false
