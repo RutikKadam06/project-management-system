@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Project Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <img th:src="@{/images/logo.svg}" alt="PMS Logo" style="width: 40px; height: 40px;">
+            <h2>Projects</h2>
+        </div>
+        <div>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="main-content">
+            <div class="header-actions">
+                <h3>All Projects</h3>
+                <a href="/projects/create" class="btn" th:if="${user.role == T(com.pms.model.User.Role).ADMIN || user.role == T(com.pms.model.User.Role).SUPER_ADMIN}">
+                    ➕ Create Project
+                </a>
+            </div>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Client</th>
+                    <th>Manager</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Progress</th>
+                    <th>Deadline</th>
+                    <th>Actions</th>
+                </tr>
+                <tr th:each="project : ${projects}">
+                    <td th:text="${project.name}"></td>
+                    <td th:text="${project.client != null ? project.client.name : 'N/A'}"></td>
+                    <td th:text="${project.manager != null ? project.manager.fullName : 'Not Assigned'}"></td>
+                    <td th:text="${project.status}"></td>
+                    <td th:text="${project.priority}"></td>
+                    <td th:text="${project.progress} + '%'"></td>
+                    <td th:text="${project.deadline}"></td>
+                    <td>
+                        <a th:href="@{/projects/{id}(id=${project.id})}">View</a>
+                        <form th:if="${project.status == T(com.pms.model.Project.Status).PENDING && (user.role == T(com.pms.model.User.Role).ADMIN || user.role == T(com.pms.model.User.Role).SUPER_ADMIN)}" 
+                              th:action="@{/projects/approve/{id}(id=${project.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn-approve">Approve</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

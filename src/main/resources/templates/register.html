@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register - Project Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <h2>Register</h2>
+        <form action="/register" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="fullName" placeholder="Full Name" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="hidden" name="role" value="MANAGER">
+            <p style="color: #666; font-size: 0.9rem; text-align: center; margin: 1rem 0;">
+                ℹ️ New users are registered as Manager by default.<br>
+                Contact Admin to change your role.
+            </p>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="/login">Login</a></p>
+    </div>
+</body>
+</html>

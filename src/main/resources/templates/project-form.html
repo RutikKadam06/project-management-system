@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Project - Project Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav>
+        <h2>Create Project</h2>
+        <div><a href="/projects">Back to Projects</a></div>
+    </nav>
+    <div class="container">
+        <div class="form-container">
+            <form action="/projects/create" method="post">
+                <label>Project Name:</label>
+                <input type="text" name="name" required>
+                
+                <label>Description:</label>
+                <textarea name="description" rows="4" required></textarea>
+                
+                <label>Client:</label>
+                <select name="client.id" required>
+                    <option value="">Select Client</option>
+                    <option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.name}"></option>
+                </select>
+                
+                <label>Manager:</label>
+                <select name="manager.id" required>
+                    <option value="">Select Manager</option>
+                    <option th:each="manager : ${managers}" th:value="${manager.id}" th:text="${manager.fullName}"></option>
+                </select>
+                
+                <label>Start Date:</label>
+                <input type="date" name="startDate" required>
+                
+                <label>Deadline:</label>
+                <input type="date" name="deadline" required>
+                
+                <label>Priority:</label>
+                <select name="priority" required>
+                    <option value="LOW">Low</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HIGH">High</option>
+                </select>
+                
+                <button type="submit">Create Project</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

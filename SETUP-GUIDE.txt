@@ -1,0 +1,272 @@
+# PROJECT MANAGEMENT SYSTEM - COMPLETE SETUP GUIDE
+
+## 📦 ALL FILES ARE IN: C:\project-management-system\
+
+## 🎯 QUICK START (3 Steps)
+
+### Step 1: Install Prerequisites
+1. **Java 17+** - Already installed ✓ (Java 25 detected)
+2. **MySQL Server** - Download from: https://dev.mysql.com/downloads/mysql/
+3. **Maven** - Download from: https://maven.apache.org/download.cgi
+
+### Step 2: Setup MySQL Database
+1. Start MySQL Server
+2. Open MySQL Command Line or Workbench
+3. Run: `CREATE DATABASE pms_db;`
+4. Update password in: `src\main\resources\application.properties`
+
+### Step 3: Run Application
+**Option A - Using Maven (Recommended):**
+```bash
+cd C:\project-management-system
+mvn spring-boot:run
+```
+
+**Option B - Using Batch File:**
+```bash
+cd C:\project-management-system
+build-and-run.bat
+```
+
+**Option C - Using IDE:**
+1. Open IntelliJ IDEA or Eclipse
+2. Import as Maven Project
+3. Run: `ProjectManagementApplication.java`
+
+## 📂 PROJECT STRUCTURE
+
+```
+C:\project-management-system\
+│
+├── src\
+│   └── main\
+│       ├── java\com\pms\
+│       │   ├── ProjectManagementApplication.java  (Main class)
+│       │   ├── model\                             (Entities)
+│       │   │   ├── User.java
+│       │   │   ├── Client.java
+│       │   │   ├── Project.java
+│       │   │   ├── Task.java
+│       │   │   ├── Meeting.java
+│       │   │   ├── ActivityLog.java
+│       │   │   └── Notification.java
+│       │   ├── repository\                        (Data Access)
+│       │   │   ├── UserRepository.java
+│       │   │   ├── ClientRepository.java
+│       │   │   ├── ProjectRepository.java
+│       │   │   ├── TaskRepository.java
+│       │   │   ├── MeetingRepository.java
+│       │   │   ├── ActivityLogRepository.java
+│       │   │   └── NotificationRepository.java
+│       │   ├── service\                           (Business Logic)
+│       │   │   ├── UserService.java
+│       │   │   ├── ProjectService.java
+│       │   │   └── TaskService.java
+│       │   ├── controller\                        (Web Controllers)
+│       │   │   ├── AuthController.java
+│       │   │   ├── DashboardController.java
+│       │   │   ├── ProjectController.java
+│       │   │   ├── TaskController.java
+│       │   │   ├── ClientController.java
+│       │   │   └── ReportController.java
+│       │   └── config\
+│       │       └── SecurityConfig.java
+│       └── resources\
+│           ├── application.properties
+│           ├── templates\                         (HTML Pages)
+│           │   ├── login.html
+│           │   ├── register.html
+│           │   ├── dashboard.html
+│           │   ├── projects.html
+│           │   ├── project-form.html
+│           │   ├── project-details.html
+│           │   ├── task-form.html
+│           │   ├── clients.html
+│           │   ├── client-form.html
+│           │   └── reports.html
+│           └── static\
+│               └── css\
+│                   └── style.css
+│
+├── pom.xml                    (Maven dependencies)
+├── README.md                  (Documentation)
+├── database.sql               (Database script)
+├── run.bat                    (Quick run script)
+└── build-and-run.bat         (Build and run script)
+```
+
+## 🔧 CONFIGURATION
+
+### Database Configuration (application.properties)
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/pms_db
+spring.datasource.username=root
+spring.datasource.password=root    # CHANGE THIS!
+```
+
+## 🚀 USAGE GUIDE
+
+### 1. First Time Access
+- URL: http://localhost:8080
+- Click "Register" to create first user
+- Select role: SUPER_ADMIN
+
+### 2. User Roles & Permissions
+
+**SUPER_ADMIN:**
+- Full system access
+- Manage all projects
+- View/manage clients
+- Generate reports
+- Access all modules
+
+**ADMIN:**
+- Create projects
+- Assign managers
+- Approve projects
+- Monitor progress
+- View reports
+
+**MANAGER:**
+- View assigned projects
+- Create tasks
+- Assign team members
+- Update progress
+- Manage daily activities
+
+### 3. Workflow
+
+**Step 1: Add Clients**
+- Login as SUPER_ADMIN
+- Go to Clients → Add Client
+- Fill in client details
+
+**Step 2: Create Project**
+- Login as ADMIN
+- Go to Projects → Create Project
+- Fill details and assign Manager
+- Project status: PENDING
+
+**Step 3: Approve Project**
+- ADMIN approves the project
+- Status changes to APPROVED
+- Manager gets notification
+
+**Step 4: Create Tasks**
+- Manager creates tasks
+- Assigns to team members
+- Sets roles (Team Leader, Developer, Tester)
+
+**Step 5: Track Progress**
+- Update task status
+- Update project progress
+- View charts and reports
+
+## 📊 FEATURES
+
+✅ Secure Authentication (BCrypt encryption)
+✅ Role-Based Access Control
+✅ Project Management (CRUD)
+✅ Task Assignment & Tracking
+✅ Client Management
+✅ Meeting Scheduling
+✅ Progress Tracking (0-100%)
+✅ Visual Charts (Chart.js)
+✅ Activity Logs
+✅ Notifications
+✅ Reports & Analytics
+✅ Approval Workflow
+✅ Dashboard (Role-specific)
+
+## 🛠️ TROUBLESHOOTING
+
+### Issue: Port 8080 already in use
+**Solution:** Change port in application.properties
+```properties
+server.port=8081
+```
+
+### Issue: Cannot connect to database
+**Solution:** 
+1. Check MySQL is running
+2. Verify credentials in application.properties
+3. Ensure database 'pms_db' exists
+
+### Issue: Maven not found
+**Solution:**
+1. Download Maven from: https://maven.apache.org/download.cgi
+2. Extract to C:\Program Files\Maven
+3. Add to PATH: C:\Program Files\Maven\bin
+4. Restart command prompt
+
+### Issue: Build fails
+**Solution:**
+1. Check Java version: `java -version` (Need 17+)
+2. Clean Maven cache: `mvn clean`
+3. Delete target folder and rebuild
+
+## 📱 ACCESSING THE APPLICATION
+
+1. **Start Application**
+2. **Open Browser**: http://localhost:8080
+3. **Register**: Create account with role
+4. **Login**: Use credentials
+5. **Explore**: Navigate through dashboard
+
+## 🔐 SECURITY FEATURES
+
+- Password encryption (BCrypt)
+- Session management
+- CSRF protection
+- SQL injection prevention
+- XSS protection
+- Role-based authorization
+
+## 📈 SAMPLE DATA
+
+After first run, register these users:
+
+1. **Super Admin**
+   - Username: superadmin
+   - Role: SUPER_ADMIN
+
+2. **Admin User**
+   - Username: admin1
+   - Role: ADMIN
+
+3. **Manager User**
+   - Username: manager1
+   - Role: MANAGER
+
+## 💡 TIPS
+
+- Use Chrome/Firefox for best experience
+- Clear browser cache if CSS doesn't load
+- Check console for errors (F12)
+- MySQL must be running before starting app
+- Default port: 8080
+- Database auto-creates tables on first run
+
+## 📞 SUPPORT
+
+If you encounter issues:
+1. Check logs in console
+2. Verify MySQL connection
+3. Ensure all prerequisites installed
+4. Check application.properties configuration
+
+## 🎓 LEARNING RESOURCES
+
+- Spring Boot: https://spring.io/projects/spring-boot
+- Thymeleaf: https://www.thymeleaf.org/
+- Chart.js: https://www.chartjs.org/
+- MySQL: https://dev.mysql.com/doc/
+
+---
+
+**Project Location:** C:\project-management-system\
+**Access URL:** http://localhost:8080
+**Default Port:** 8080
+**Database:** pms_db
+
+**Ready to use! Follow the Quick Start guide above.**

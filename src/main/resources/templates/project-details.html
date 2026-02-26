@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Project Details - Project Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav>
+        <h2>Project Details</h2>
+        <div><a href="/projects">Back to Projects</a></div>
+    </nav>
+    <div class="container">
+        <div class="main-content">
+            <div class="project-header">
+                <h3 th:text="${project.name}"></h3>
+                <span class="status" th:text="${project.status}"></span>
+            </div>
+            <div class="project-info">
+                <p><strong>Description:</strong> <span th:text="${project.description}"></span></p>
+                <p><strong>Client:</strong> <span th:text="${project.client != null ? project.client.name : 'N/A'}"></span></p>
+                <p><strong>Manager:</strong> <span th:text="${project.manager != null ? project.manager.fullName : 'Not Assigned'}"></span></p>
+                <p><strong>Priority:</strong> <span th:text="${project.priority}"></span></p>
+                <p><strong>Start Date:</strong> <span th:text="${project.startDate}"></span></p>
+                <p><strong>Deadline:</strong> <span th:text="${project.deadline}"></span></p>
+                <p><strong>Progress:</strong> <span th:text="${project.progress} + '%'"></span></p>
+            </div>
+            
+            <div class="project-info" style="margin-top: 1.5rem;">
+                <h4 style="color: #5B5FED; margin-bottom: 1rem;">👥 Team Members</h4>
+                <div th:if="${tasks != null && !tasks.isEmpty()}">
+                    <div th:each="task : ${tasks}" th:if="${task.assignedTo != null}" style="padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">
+                        <span style="font-weight: 600;" th:text="${task.assignedTo.fullName}"></span>
+                        <span style="color: #666; margin-left: 1rem;" th:text="'(' + ${task.taskRole} + ')'"></span>
+                        <span style="color: #999; margin-left: 0.5rem; font-size: 0.9rem;" th:text="'- ' + ${task.title}"></span>
+                    </div>
+                </div>
+                <p th:if="${tasks == null || tasks.isEmpty()}" style="color: #666;">No team members assigned yet.</p>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" th:style="'width:' + ${project.progress} + '%'"></div>
+            </div>
+            <div class="chart-container">
+                <canvas id="progressChart"></canvas>
+            </div>
+            <form th:action="@{/projects/progress/{id}(id=${project.id})}" method="post">
+                <label>Update Progress:</label>
+                <input type="number" name="progress" min="0" max="100" th:value="${project.progress}">
+                <button type="submit">Update</button>
+            </form>
+            <div class="tasks-section">
+                <h4>Tasks</h4>
+                <a th:href="@{/tasks/create(projectId=${project.id})}" class="btn">Add Task</a>
+                <table th:if="${tasks != null && !tasks.isEmpty()}">
+                    <tr>
+                        <th>Title</th>
+                        <th>Assigned To</th>
+                        <th>Status</th>
+                        <th>Due Date</th>
+                    </tr>
+                    <tr th:each="task : ${tasks}">
+                        <td th:text="${task.title}"></td>
+                        <td th:text="${task.assignedTo != null ? task.assignedTo.fullName : 'Unassigned'}"></td>
+                        <td th:text="${task.status}"></td>
+                        <td th:text="${task.dueDate}"></td>
+                    </tr>
+                </table>
+                <p th:if="${tasks == null || tasks.isEmpty()}" style="color: #666; margin-top: 1rem;">No tasks assigned to this project yet.</p>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        var progress = [[${project.progress}]];
+        var ctx = document.getElementById('progressChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Completed', 'Remaining'],
+                datasets: [{
+                    data: [progress, 100 - progress],
+                    backgroundColor: ['#4CAF50', '#e0e0e0']
+                }]
+            }
+        });
+    </script>
+</body>
+</html>

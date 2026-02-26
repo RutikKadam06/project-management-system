@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Project Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <img th:src="@{/images/logo.svg}" alt="PMS Logo" style="width: 40px; height: 40px;">
+            <h2>PMS Dashboard</h2>
+        </div>
+        <div>
+            <span th:text="${user.fullName}"></span> (<span th:text="${user.role}"></span>)
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="sidebar">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/projects">Projects</a>
+            <a href="/users" th:if="${user.role == T(com.pms.model.User.Role).SUPER_ADMIN || user.role == T(com.pms.model.User.Role).ADMIN}">Users</a>
+            <a href="/clients" th:if="${user.role == T(com.pms.model.User.Role).SUPER_ADMIN}">Clients</a>
+            <a href="/reports">Reports</a>
+        </div>
+        <div class="main-content">
+            <h3>Welcome, <span th:text="${user.fullName}"></span></h3>
+            <div class="notifications" th:if="${notifications != null && !notifications.isEmpty()}">
+                <h4>Notifications</h4>
+                <div th:each="notif : ${notifications}" class="notification">
+                    <p th:text="${notif.message}"></p>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat-card">
+                    <h4>Total Projects</h4>
+                    <p th:text="${projects != null ? projects.size() : 0}"></p>
+                </div>
+                <div class="stat-card">
+                    <h4>Pending</h4>
+                    <p th:text="${pendingCount}"></p>
+                    <span class="stat-change" style="color: #f39c12;">⏳ Awaiting Approval</span>
+                </div>
+                <div class="stat-card">
+                    <h4>In Progress</h4>
+                    <p th:text="${inProgressCount}"></p>
+                    <span class="stat-change positive">🚀 Active</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Completed</h4>
+                    <p th:text="${completedCount}"></p>
+                    <span class="stat-change positive">✅ Done</span>
+                </div>
+            </div>
+            
+            <div class="chart-container" style="max-width: 500px; margin: 2rem auto;">
+                <h4 style="text-align: center; margin-bottom: 1rem; color: #2c3e50;">Project Status Distribution</h4>
+                <canvas id="statusChart"></canvas>
+            </div>
+            <div class="projects-list">
+                <h4>Projects</h4>
+                <table th:if="${projects != null && !projects.isEmpty()}">
+                    <tr>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Progress</th>
+                        <th>Deadline</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr th:each="project : ${projects}">
+                        <td th:text="${project.name}"></td>
+                        <td th:text="${project.status}"></td>
+                        <td th:text="${project.progress} + '%'"></td>
+                        <td th:text="${project.deadline}"></td>
+                        <td><a th:href="@{/projects/{id}(id=${project.id})}">View</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        var pending = [[${pendingCount}]];
+        var approved = [[${approvedCount}]];
+        var inProgress = [[${inProgressCount}]];
+        var completed = [[${completedCount}]];
+        
+        var ctx = document.getElementById('statusChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Approved', 'In Progress', 'Completed'],
+                datasets: [{
+                    data: [pending, approved, inProgress, completed],
+                    backgroundColor: ['#f39c12', '#3498db', '#5B5FED', '#27ae60'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

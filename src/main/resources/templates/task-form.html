@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Task - Project Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav>
+        <h2>Create Task</h2>
+        <div><a th:href="@{/projects/{id}(id=${project.id})}">Back to Project</a></div>
+    </nav>
+    <div class="container">
+        <div class="form-container">
+            <form action="/tasks/create" method="post">
+                <input type="hidden" name="project.id" th:value="${project.id}">
+                
+                <label>Task Title:</label>
+                <input type="text" name="title" required>
+                
+                <label>Description:</label>
+                <textarea name="description" rows="4" required></textarea>
+                
+                <label>Assign To:</label>
+                <select name="assignedTo.id" required>
+                    <option value="">Select User</option>
+                    <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.fullName}"></option>
+                </select>
+                
+                <label>Task Role:</label>
+                <select name="taskRole" required>
+                    <option value="TEAM_LEADER">Team Leader</option>
+                    <option value="DEVELOPER">Developer</option>
+                    <option value="TESTER">Tester</option>
+                </select>
+                
+                <label>Due Date:</label>
+                <input type="date" name="dueDate" required>
+                
+                <button type="submit">Create Task</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

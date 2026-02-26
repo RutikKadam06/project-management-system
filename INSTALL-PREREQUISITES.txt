@@ -1,0 +1,148 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    INSTALLATION REQUIRED
+═══════════════════════════════════════════════════════════════════════════════
+
+Your system is missing required software to run this project.
+
+MISSING:
+❌ MySQL Server - Not installed
+❌ Maven - Not installed
+
+═══════════════════════════════════════════════════════════════════════════════
+                    STEP-BY-STEP INSTALLATION GUIDE
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: INSTALL MYSQL SERVER
+─────────────────────────────────────────────────────────────────────────────
+1. Download MySQL Installer:
+   https://dev.mysql.com/downloads/installer/
+
+2. Run the installer (mysql-installer-web-community-8.0.xx.msi)
+
+3. Choose "Developer Default" setup type
+
+4. Set root password (remember this!)
+
+5. Complete installation
+
+6. MySQL will run automatically as a Windows service
+
+
+STEP 2: INSTALL MAVEN
+─────────────────────────────────────────────────────────────────────────────
+1. Download Maven:
+   https://maven.apache.org/download.cgi
+   (Download apache-maven-3.9.x-bin.zip)
+
+2. Extract to: C:\Program Files\Maven
+
+3. Add to System PATH:
+   - Press Win + X → System
+   - Click "Advanced system settings"
+   - Click "Environment Variables"
+   - Under "System variables", find "Path"
+   - Click "Edit" → "New"
+   - Add: C:\Program Files\Maven\bin
+   - Click OK on all windows
+
+4. Restart Command Prompt
+
+
+STEP 3: VERIFY INSTALLATION
+─────────────────────────────────────────────────────────────────────────────
+Open NEW Command Prompt and run:
+
+java -version          (Should show Java 25)
+mvn -version           (Should show Maven 3.9.x)
+mysql --version        (Should show MySQL 8.0.x)
+
+
+STEP 4: CREATE DATABASE
+─────────────────────────────────────────────────────────────────────────────
+1. Open Command Prompt
+2. Run: mysql -u root -p
+3. Enter your MySQL password
+4. Run: CREATE DATABASE pms_db;
+5. Run: exit
+
+
+STEP 5: CONFIGURE PROJECT
+─────────────────────────────────────────────────────────────────────────────
+Edit file: C:\project-management-system\src\main\resources\application.properties
+
+Change line:
+spring.datasource.password=root
+
+To:
+spring.datasource.password=YOUR_MYSQL_PASSWORD
+
+
+STEP 6: RUN PROJECT
+─────────────────────────────────────────────────────────────────────────────
+Open Command Prompt in project folder:
+
+cd C:\project-management-system
+mvn spring-boot:run
+
+Wait for "Started ProjectManagementApplication"
+Open browser: http://localhost:8080
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                    ALTERNATIVE: USE IDE
+═══════════════════════════════════════════════════════════════════════════════
+
+If you have IntelliJ IDEA or Eclipse:
+
+1. Open IDE
+2. File → Open → Select C:\project-management-system
+3. Wait for Maven dependencies to download
+4. Right-click ProjectManagementApplication.java
+5. Click "Run"
+
+IDE will handle Maven automatically!
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                    QUICK LINKS
+═══════════════════════════════════════════════════════════════════════════════
+
+MySQL Installer:
+https://dev.mysql.com/downloads/installer/
+
+Maven Download:
+https://maven.apache.org/download.cgi
+
+IntelliJ IDEA Community (Free):
+https://www.jetbrains.com/idea/download/
+
+Eclipse IDE:
+https://www.eclipse.org/downloads/
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                    TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+Q: Maven command not found after installation?
+A: Restart Command Prompt or restart computer
+
+Q: Cannot connect to MySQL?
+A: Check MySQL service is running in Windows Services
+
+Q: Port 8080 already in use?
+A: Change port in application.properties to 8081
+
+Q: Build fails?
+A: Run: mvn clean install -U
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PROJECT LOCATION: C:\project-management-system\
+STATUS: Ready to run after installing prerequisites
+JAVA: ✓ Installed (Java 25)
+MYSQL: ❌ Not installed
+MAVEN: ❌ Not installed
+
+═══════════════════════════════════════════════════════════════════════════════

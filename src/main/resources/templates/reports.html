@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reports - Project Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <img th:src="@{/images/logo.svg}" alt="PMS Logo" style="width: 40px; height: 40px;">
+            <h2>Reports & Analytics</h2>
+        </div>
+        <div>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="main-content">
+            <h3>Project Reports</h3>
+            <div class="charts-grid">
+                <div class="chart-box">
+                    <h4>Project Status Distribution</h4>
+                    <canvas id="statusChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h4>Project Progress</h4>
+                    <canvas id="progressChart"></canvas>
+                </div>
+            </div>
+            <div class="report-table">
+                <h4>Project Summary</h4>
+                <table>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Status</th>
+                        <th>Progress</th>
+                        <th>Priority</th>
+                        <th>Deadline</th>
+                    </tr>
+                    <tr th:each="project : ${projects}">
+                        <td th:text="${project.name}"></td>
+                        <td th:text="${project.status}"></td>
+                        <td th:text="${project.progress} + '%'"></td>
+                        <td th:text="${project.priority}"></td>
+                        <td th:text="${project.deadline}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        var statusData = [[${statusCount}]];
+        var projects = [[${projects}]];
+        
+        var statusCtx = document.getElementById('statusChart').getContext('2d');
+        new Chart(statusCtx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(statusData),
+                datasets: [{
+                    data: Object.values(statusData),
+                    backgroundColor: ['#FFC107', '#4CAF50', '#2196F3', '#9E9E9E']
+                }]
+            }
+        });
+        
+        var progressCtx = document.getElementById('progressChart').getContext('2d');
+        new Chart(progressCtx, {
+            type: 'bar',
+            data: {
+                labels: projects.map(p => p.name),
+                datasets: [{
+                    label: 'Progress %',
+                    data: projects.map(p => p.progress),
+                    backgroundColor: '#4CAF50'
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true, max: 100 }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
